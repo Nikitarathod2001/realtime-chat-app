@@ -1,4 +1,5 @@
 import User from "../models/User.js";
+import generateToken from "../utils/generateToken.js";
 
 
 // Register User
@@ -41,6 +42,58 @@ export const registerUser = async (req, res) => {
   } catch (error) {
     console.log(error);
 
+    res.status(500).json({
+      success: false,
+      message: error.message
+    });
+  }
+};
+
+
+// Login User
+export const loginUser = async (req, res) => {
+  try {
+
+    const {email, password} = req.body;
+    
+    if(!email || !password) {
+      return res.status(400).json({
+        success: false,
+        message: "All fields are required"
+      });
+    }
+
+    const user = await User.findOne({email});
+    if(!user) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid credentials"
+      });
+    }
+
+    const isMatch = await user.comparePassword(password);
+    if(!isMatch) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid credentials"
+      });
+    }
+
+    const token = await generateToken(user._id);
+
+    res.status(200).json({
+      success: true,
+      message: "Login successful",
+      token,
+      user: {
+        id: user._id,
+        username: user.username,
+        email: user.email
+      }
+    });
+    
+  } catch (error) {
+    console.log(error);
     res.status(500).json({
       success: false,
       message: error.message
