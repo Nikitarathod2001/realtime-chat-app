@@ -27,6 +27,12 @@ const RegisterPage = () => {
       const data = await registerUser(formData);
 
       toast.success(data.success);
+
+      setFormData({
+        username: "",
+        email: "",
+        password: ""
+      });
       navigate("/login");
 
       
@@ -81,7 +87,7 @@ const RegisterPage = () => {
         <br />
         <p>
           Already have an account?{" "}
-          <span onClick={() => navigate("/")}>
+          <span onClick={() => navigate("/login")}>
             Login here
           </span>
         </p>
