@@ -25,3 +25,16 @@ export const loginUser = async (userData) => {
     console.log(error);
   }
 };
+
+
+// Get user profile
+export const getProfile = async () => {
+  try {
+
+    const response = await api.get("/auth/profile");
+    return response.data;
+    
+  } catch (error) {
+    console.log(error);
+  }
+};

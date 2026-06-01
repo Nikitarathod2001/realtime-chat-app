@@ -1,4 +1,5 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
+import { getProfile } from "../services/authService";
 
 
 export const authContext = createContext();
@@ -6,6 +7,8 @@ export const authContext = createContext();
 export const AuthContextProvider = ({children}) => {
 
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(false);
+
   const [token, setToken] = useState(
     localStorage.getItem("chat-token") || null
   );
@@ -25,6 +28,34 @@ export const AuthContextProvider = ({children}) => {
     setUser(null);
     setToken(null);
   };
+
+  // Get user details from backend to persist user information on frontend
+  useEffect(() => {
+    const loadUser = async () => {
+      setLoading(true);
+      try {
+
+        if(!token) {
+          setLoading(false);
+          return;
+        }
+
+        const data = await getProfile();
+        setUser(data.user);
+        
+      } catch (error) {
+        localStorage.removeItem("chat-token");
+
+        setUser(null);
+        setToken(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadUser();
+  }, []);
+
 
   const value = {
     user, token, storeUserDetails, logout
