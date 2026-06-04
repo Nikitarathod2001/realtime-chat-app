@@ -1,19 +1,29 @@
 import React from 'react'
 import { useAuth } from '../context/authContext'
+import { useNavigate } from 'react-router-dom';
 
 const ChatPage = () => {
 
-  const {user} = useAuth();
+  const navigate = useNavigate();
+
+  const {user, logout} = useAuth();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
+  };
 
   return (
     <div>
-      Chat Page
+      <h1>Chat Page</h1>
 
-      <p>
-        {
-          user && user.username
-        }
-      </p>
+      <h2>
+        {user?.username}
+      </h2>
+
+      <button onClick={handleLogout}>
+        Logout
+      </button>
     </div>
   )
 }
