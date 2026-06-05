@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useAuth } from '../context/authContext'
 import { useNavigate } from 'react-router-dom';
+import socket from '../socket/socket';
 
 const ChatPage = () => {
 
@@ -12,6 +13,18 @@ const ChatPage = () => {
     logout();
     navigate("/login");
   };
+
+  useEffect(() => {
+    socket.connect();
+
+    socket.on("connect", () => {
+      console.log(`Connected: ${socket.id}`);
+    });
+
+    return () => {
+      socket.disconnect();
+    };
+  }, []);
 
   return (
     <div>
