@@ -11,10 +11,28 @@ const ChatPage = () => {
   const {user, logout} = useAuth();
 
   const [onlineUsers, setOnlineUsers] = useState([]);
+  const [message, setMessage] = useState("");
+  const [messages, setMessages] = useState([]);
 
+  // Handler Logout
   const handleLogout = () => {
     logout();
     navigate("/login");
+  };
+
+  // Handle Sending messages
+  const handleSendMessage = () => {
+    if(!message.trim()) {
+      return;
+    }
+
+    socket.emit("send-message", {
+      text: message,
+      senderId: user._id,
+      senderName: user.username
+    });
+
+    setMessage("");
   };
 
   useEffect(() => {
@@ -39,7 +57,17 @@ const ChatPage = () => {
       }
     );
 
+    socket.on("receive-message", (newMessage) => {
+      setMessages((prev) => [
+        ...prev,
+        newMessage
+      ]);
+    });
+
     return () => {
+      socket.off("online-users");
+      socket.off("receive-message");
+      
       socket.disconnect();
     };
   }, []);
@@ -70,6 +98,37 @@ const ChatPage = () => {
           ))
         }
       </ul>
+
+      <br />
+      <br />
+
+      <input type="text" 
+        placeholder='Type message...'
+        value={message}
+        onChange={(e) => setMessage(e.target.value)}
+      />
+
+      <button onClick={handleSendMessage}>
+        Send
+      </button>
+
+      <br />
+      <br />
+
+      <h2>Messages</h2>
+
+      <div>
+        {
+          messages.map((msg, index) => (
+            <div key={index}>
+              <strong>
+                {msg.senderName}
+              </strong>
+              : {msg.text}
+            </div>
+          ))
+        }
+      </div>
     </div>
   )
 }
