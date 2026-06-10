@@ -29,6 +29,22 @@ const socketHandler = (io) => {
       io.emit("receive-message", message);
     });
 
+    // Typing event
+    socket.on("typing", (username) => {
+      socket.broadcast.emit(
+        "user-typing",
+        username
+      );
+    });
+
+    // Stop-typing event
+    socket.on("stop-typing", (username) => {
+      socket.broadcast.emit(
+        "user-stop-typing",
+        username
+      );
+    });
+
     // Disconnect
     socket.on("disconnect", () => {
       onlineUsers.delete(socket.id);

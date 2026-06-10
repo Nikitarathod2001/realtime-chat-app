@@ -13,6 +13,9 @@ const ChatPage = () => {
   const [onlineUsers, setOnlineUsers] = useState([]);
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
+  const[typingUser, setTypingUser] = useState("");
+
+  let typingTimeout;
 
   // Handler Logout
   const handleLogout = () => {
@@ -44,13 +47,35 @@ const ChatPage = () => {
       });
   };
 
+  // Handle typing event
+  const handleTyping = (e) => {
+    setMessage(e.target.value);
+
+    socket.emit(
+      "typing",
+      user.username
+    );
+
+    clearTimeout(typingTimeout);
+
+    typingTimeout = setTimeout(() => {
+      socket.emit(
+        "stop-typing",
+        user.username
+      );
+    }, 1000);
+  };
+
+
   useEffect(() => {
     if(!user) {
       return;
     }
     
+    // Socket connection
     socket.connect();
 
+    // Join chat after connection
     socket.on("connect", () => {
       console.log(`Connected: ${socket.id}`);
 
@@ -63,6 +88,7 @@ const ChatPage = () => {
       );
     });
 
+    // Receive online users
     socket.on(
       "online-users",
       (users) => {
@@ -70,6 +96,7 @@ const ChatPage = () => {
       }
     );
 
+    // Receive messages
     socket.on("receive-message", (newMessage) => {
       setMessages((prev) => [
         ...prev,
@@ -77,9 +104,28 @@ const ChatPage = () => {
       ]);
     });
 
+    // Receive user-typing event
+    socket.on(
+      "user-typing",
+      (username) => {
+        setTypingUser(username);
+      }
+    );
+
+    // Receive user-stop-typing event
+    socket.on(
+      "user-stop-typing",
+      () => {
+        setTypingUser("");
+      }
+    );
+
     return () => {
       socket.off("online-users");
       socket.off("receive-message");
+
+      socket.off("user-typing");
+      socket.off("user-stop-typing");
 
       socket.disconnect();
     };
@@ -118,7 +164,7 @@ const ChatPage = () => {
       <input type="text" 
         placeholder='Type message...'
         value={message}
-        onChange={(e) => setMessage(e.target.value)}
+        onChange={handleTyping}
         onKeyDown={(e) => {
           if(e.key === "Enter") {
             handleSendMessage();
@@ -134,6 +180,14 @@ const ChatPage = () => {
       <br />
 
       <h2>Messages</h2>
+
+      {
+        typingUser && (
+          <p>
+            {typingUser} is typing...
+          </p>
+        )
+      }
 
       <div>
         {
