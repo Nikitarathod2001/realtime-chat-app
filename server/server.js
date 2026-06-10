@@ -6,6 +6,7 @@ import { Server } from "socket.io";
 import connectDB from "./src/config/db.js";
 import authRouter from "./src/routes/authRoute.js";
 import socketHandler from "./src/socket/socketHandler.js";
+import messageRouter from "./src/routes/messageRoute.js";
 
 
 connectDB();
@@ -31,6 +32,7 @@ app.use(express.json());
 
 // API endpoints
 app.use("/api/auth", authRouter);
+app.use("/api/messages", messageRouter);
 
 
 app.get("/", (req, res) => {

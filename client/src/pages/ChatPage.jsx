@@ -3,6 +3,7 @@ import { useAuth } from '../context/authContext'
 import { useNavigate } from 'react-router-dom';
 import socket from '../socket/socket';
 import { useState } from 'react';
+import api from '../services/api';
 
 const ChatPage = () => {
 
@@ -73,6 +74,18 @@ const ChatPage = () => {
     }, 1000);
   };
 
+  // Load messages
+  const loadMessages = async () => {
+    try {
+
+      const response = await api.get("/messages");
+
+      setMessages(response.data.messages);
+      
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
     if(!user) {
@@ -141,6 +154,10 @@ const ChatPage = () => {
       socket.disconnect();
     };
   }, [user]);
+
+  useEffect(() => {
+    loadMessages();
+  }, []);
 
   return (
     <div>
