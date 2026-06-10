@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useAuth } from '../context/authContext'
 import { useNavigate } from 'react-router-dom';
 import socket from '../socket/socket';
@@ -15,7 +15,8 @@ const ChatPage = () => {
   const [messages, setMessages] = useState([]);
   const[typingUser, setTypingUser] = useState("");
 
-  let typingTimeout;
+  const typingTimeoutRef = useRef(null);
+  const isTypingRef = useRef(false);
 
   // Handler Logout
   const handleLogout = () => {
@@ -51,18 +52,24 @@ const ChatPage = () => {
   const handleTyping = (e) => {
     setMessage(e.target.value);
 
-    socket.emit(
-      "typing",
-      user.username
-    );
+    if(!isTypingRef.current) {
+      socket.emit(
+        "typing",
+        user.username
+      );
 
-    clearTimeout(typingTimeout);
+      isTypingRef.current = true;
+    }
 
-    typingTimeout = setTimeout(() => {
+    clearTimeout(typingTimeoutRef.current);
+
+    typingTimeoutRef.current = setTimeout(() => {
       socket.emit(
         "stop-typing",
         user.username
       );
+
+      isTypingRef.current = false;
     }, 1000);
   };
 
@@ -127,6 +134,10 @@ const ChatPage = () => {
       socket.off("user-typing");
       socket.off("user-stop-typing");
 
+      if(typingTimeoutRef.current) {
+        clearTimeout(typingTimeoutRef.current);
+      }
+
       socket.disconnect();
     };
   }, [user]);
@@ -181,15 +192,21 @@ const ChatPage = () => {
 
       <h2>Messages</h2>
 
-      {
-        typingUser && (
-          <p>
-            {typingUser} is typing...
-          </p>
-        )
-      }
+      
 
-      <div>
+      <div style={{
+        border: "1px solid black",
+        padding: "10px",
+        height: "300px",
+        overflowY: "auto",
+      }}>
+        {
+          typingUser && (
+            <p>
+              {typingUser} is typing...
+            </p>
+          )
+        }
         {
           messages.map((msg, index) => {
             const isOwnMessage = msg.senderId === user._id;
