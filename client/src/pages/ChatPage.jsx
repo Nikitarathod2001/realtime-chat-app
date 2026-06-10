@@ -35,7 +35,20 @@ const ChatPage = () => {
     setMessage("");
   };
 
+  // Format time
+  const formatTime = (timestamp) => {
+    return new Date(timestamp)
+      .toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+  };
+
   useEffect(() => {
+    if(!user) {
+      return;
+    }
+    
     socket.connect();
 
     socket.on("connect", () => {
@@ -67,10 +80,10 @@ const ChatPage = () => {
     return () => {
       socket.off("online-users");
       socket.off("receive-message");
-      
+
       socket.disconnect();
     };
-  }, []);
+  }, [user]);
 
   return (
     <div>
@@ -106,6 +119,11 @@ const ChatPage = () => {
         placeholder='Type message...'
         value={message}
         onChange={(e) => setMessage(e.target.value)}
+        onKeyDown={(e) => {
+          if(e.key === "Enter") {
+            handleSendMessage();
+          }
+        }}
       />
 
       <button onClick={handleSendMessage}>
@@ -119,14 +137,34 @@ const ChatPage = () => {
 
       <div>
         {
-          messages.map((msg, index) => (
-            <div key={index}>
-              <strong>
-                {msg.senderName}
-              </strong>
-              : {msg.text}
-            </div>
-          ))
+          messages.map((msg, index) => {
+            const isOwnMessage = msg.senderId === user._id;
+
+            return (
+              <div key={index}
+                style={{
+                  textAlign: isOwnMessage ? "right" : "left",
+                  marginBottom: "15px"
+                }}
+              >
+                <strong>
+                  {
+                    isOwnMessage ? "You" : msg.senderName
+                  }
+                </strong>
+
+                <div>
+                  {msg.text}
+                </div>
+
+                <small>
+                  {
+                    formatTime(msg.timestamp)
+                  }
+                </small>
+              </div>
+            );
+          })
         }
       </div>
     </div>
