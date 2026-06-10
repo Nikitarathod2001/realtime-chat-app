@@ -208,11 +208,11 @@ const ChatPage = () => {
           )
         }
         {
-          messages.map((msg, index) => {
+          messages.map((msg) => {
             const isOwnMessage = msg.senderId === user._id;
 
             return (
-              <div key={index}
+              <div key={msg._id}
                 style={{
                   textAlign: isOwnMessage ? "right" : "left",
                   marginBottom: "15px"

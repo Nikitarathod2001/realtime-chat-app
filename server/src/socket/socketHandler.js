@@ -1,3 +1,4 @@
+import Message from "../models/Message.js";
 import onlineUsers from "./onlineUsers.js";
 
 const socketHandler = (io) => {
@@ -20,13 +21,24 @@ const socketHandler = (io) => {
     });
 
     // Receive messages and broadcast them
-    socket.on("send-message", (messageData) => {
-      const message = {
-        ...messageData,
-        timestamp: new Date().toISOString(),
-      };
+    socket.on("send-message", async (messageData) => {
+      try {
 
-      io.emit("receive-message", message);
+        const savedMessage = await Message.create({
+          text: messageData.text,
+          senderId: messageData.senderId,
+          senderName: messageData.senderName,
+          timestamp: new Date(),
+        });
+
+        io.emit(
+          "receive-message",
+          savedMessage
+        );
+        
+      } catch (error) {
+        console.log(error);
+      }
     });
 
     // Typing event
