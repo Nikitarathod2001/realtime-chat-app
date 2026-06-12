@@ -19,6 +19,8 @@ const ChatPage = () => {
   const typingTimeoutRef = useRef(null);
   const isTypingRef = useRef(false);
 
+  const messagesEndRef = useRef(null);
+
   // Handler Logout
   const handleLogout = () => {
     logout();
@@ -85,6 +87,13 @@ const ChatPage = () => {
     } catch (error) {
       console.log(error);
     }
+  };
+
+  // Scroll Function
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({
+      behavior: "smooth",
+    });
   };
 
   useEffect(() => {
@@ -155,9 +164,15 @@ const ChatPage = () => {
     };
   }, [user]);
 
+  // Load messages 
   useEffect(() => {
     loadMessages();
   }, []);
+
+  // Scroll Into View
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
   return (
     <div>
@@ -218,13 +233,6 @@ const ChatPage = () => {
         overflowY: "auto",
       }}>
         {
-          typingUser && (
-            <p>
-              {typingUser} is typing...
-            </p>
-          )
-        }
-        {
           messages.map((msg) => {
             const isOwnMessage = msg.senderId === user._id;
 
@@ -254,6 +262,15 @@ const ChatPage = () => {
             );
           })
         }
+        {
+          typingUser && (
+            <p>
+              {typingUser} is typing...
+            </p>
+          )
+        }
+
+        <div ref={messagesEndRef}></div>
       </div>
     </div>
   )
