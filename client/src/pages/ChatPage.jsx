@@ -124,8 +124,7 @@ const ChatPage = () => {
   }, [messages]);
 
   return (
-    <div>
-      <h1>Chat Page</h1>
+    <div className='max-w-7xl mx-auto p-5'>
 
       <button onClick={handleLogout}>
         Logout
@@ -133,20 +132,31 @@ const ChatPage = () => {
 
       <ConnectionStatus connectionStatus={connectionStatus}/>
 
-      <OnlineUsers onlineUsers={onlineUsers} user={user}/>   
+      <div className='flex gap-5 mt-5'>
 
-      <MessageList messages={messages}
-        user={user}
-        formatTime={formatTime}
-        messagesEndRef={messagesEndRef}
-        typingUser={typingUser}
-      />
+        <div className='w-64 border rounded-lg p-4 bg-white shadow-sm'>
 
-      <br />
-      <MessageInput message={message}
-        handleTyping={handleTyping}
-        handleSendMessage={handleSendMessage}
-      />
+          <OnlineUsers onlineUsers={onlineUsers} user={user}/>  
+          
+        </div>   
+
+        <div className='flex-1'>
+
+          <MessageList messages={messages}
+            user={user}
+            formatTime={formatTime}
+            messagesEndRef={messagesEndRef}
+            typingUser={typingUser}
+          />
+        
+          <MessageInput message={message}
+            handleTyping={handleTyping}
+            handleSendMessage={handleSendMessage}
+          />
+
+        </div>
+
+      </div>
     </div>
   )
 }
