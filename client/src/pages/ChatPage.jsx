@@ -4,6 +4,10 @@ import { useNavigate } from 'react-router-dom';
 import socket from '../socket/socket';
 import { useState } from 'react';
 import api from '../services/api';
+import ConnectionStatus from '../components/ConnectionStatus';
+import OnlineUsers from '../components/OnlineUsers';
+import MessageList from '../components/MessageList';
+import MessageInput from '../components/MessageInput';
 
 const ChatPage = () => {
 
@@ -192,110 +196,26 @@ const ChatPage = () => {
     <div>
       <h1>Chat Page</h1>
 
-      <h2>
-        {user?.username}
-      </h2>
-
       <button onClick={handleLogout}>
         Logout
       </button>
 
-      <br />
-      <br />
+      <ConnectionStatus connectionStatus={connectionStatus}/>
 
-      <h3>
-        {
-          connectionStatus === "Connected"
-          ? "🟢 Connected"
-          : connectionStatus === "Disconnected"
-          ? "🔴 Disconnected"
-          : "🟡 Connecting..."
-        }
-      </h3>
+      <OnlineUsers onlineUsers={onlineUsers} user={user}/>   
 
-      <h2>Online Users</h2>
-
-      <ul>
-        {
-          onlineUsers.map((onlineUser) => (
-            <li key={onlineUser.userId}>
-              {onlineUser.username}
-            </li>
-          ))
-        }
-      </ul>
-
-      <br />
-      <br />
-
-      <input type="text" 
-        placeholder='Type message...'
-        value={message}
-        onChange={handleTyping}
-        onKeyDown={(e) => {
-          if(e.key === "Enter") {
-            handleSendMessage();
-          }
-        }}
+      <MessageList messages={messages}
+        user={user}
+        formatTime={formatTime}
+        messagesEndRef={messagesEndRef}
+        typingUser={typingUser}
       />
 
-      <button onClick={handleSendMessage}>
-        Send
-      </button>
-
       <br />
-      <br />
-
-      <h2>Messages</h2>
-
-      
-
-      <div style={{
-        border: "1px solid black",
-        padding: "10px",
-        height: "300px",
-        overflowY: "auto",
-      }}>
-        {
-          messages.map((msg) => {
-            const isOwnMessage = msg.senderId === user._id;
-
-            return (
-              <div key={msg._id}
-                style={{
-                  textAlign: isOwnMessage ? "right" : "left",
-                  marginBottom: "15px"
-                }}
-              >
-                <strong>
-                  {
-                    isOwnMessage ? "You" : msg.senderName
-                  }
-                </strong>
-
-                <div>
-                  {msg.text}
-                </div>
-
-                <small>
-                  {
-                    formatTime(msg.timestamp)
-                  }
-                </small>
-              </div>
-            );
-          })
-        }
-        {
-          typingUser && (
-            <p>
-              {typingUser} is typing...
-            </p>
-          )
-        }
-
-        <div ref={messagesEndRef}></div>
-      </div>
+      <MessageInput message={message}
+        handleTyping={handleTyping}
+        handleSendMessage={handleSendMessage}
+      />
     </div>
   )
 }
