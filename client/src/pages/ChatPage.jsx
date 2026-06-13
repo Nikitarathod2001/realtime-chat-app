@@ -8,6 +8,7 @@ import ConnectionStatus from '../components/ConnectionStatus';
 import OnlineUsers from '../components/OnlineUsers';
 import MessageList from '../components/MessageList';
 import MessageInput from '../components/MessageInput';
+import useSocket from '../hooks/useSocket';
 
 const ChatPage = () => {
 
@@ -26,6 +27,16 @@ const ChatPage = () => {
   const messagesEndRef = useRef(null);
 
   const [connectionStatus, setConnectionStatus] = useState("Connecting...");
+
+  // Custom socket hook
+  useSocket(
+    user, 
+    setOnlineUsers,
+    setMessages,
+    setConnectionStatus,
+    setTypingUser,
+    typingTimeoutRef
+  );
 
   // Handler Logout
   const handleLogout = () => {
@@ -101,86 +112,6 @@ const ChatPage = () => {
       behavior: "smooth",
     });
   };
-
-  useEffect(() => {
-    if(!user) {
-      return;
-    }
-    
-    // Socket connection
-    socket.connect();
-
-    // Join chat after connection
-    socket.on("connect", () => {
-      console.log(`Connected: ${socket.id}`);
-      setConnectionStatus("Connected");
-
-      socket.emit(
-        "join-chat",
-        {
-          userId: user._id,
-          username: user.username,
-        }
-      );
-    });
-
-    // Receive online users
-    socket.on(
-      "online-users",
-      (users) => {
-        setOnlineUsers(users);
-      }
-    );
-
-    // Receive messages
-    socket.on("receive-message", (newMessage) => {
-      setMessages((prev) => [
-        ...prev,
-        newMessage
-      ]);
-    });
-
-    // Receive user-typing event
-    socket.on(
-      "user-typing",
-      (username) => {
-        setTypingUser(username);
-      }
-    );
-
-    // Receive user-stop-typing event
-    socket.on(
-      "user-stop-typing",
-      () => {
-        setTypingUser("");
-      }
-    );
-
-    socket.on("disconnect", () => {
-      setConnectionStatus("Disconnected");
-    });
-
-    socket.io.on("reconnect", () => {
-      setConnectionStatus("Connected");
-    });
-
-    return () => {
-      socket.off("online-users");
-      socket.off("receive-message");
-
-      socket.off("user-typing");
-      socket.off("user-stop-typing");
-
-      if(typingTimeoutRef.current) {
-        clearTimeout(typingTimeoutRef.current);
-      }
-
-      socket.off("connect");
-      socket.off("disconnect");
-      socket.off("reconnect");
-      socket.disconnect();
-    };
-  }, [user]);
 
   // Load messages 
   useEffect(() => {
