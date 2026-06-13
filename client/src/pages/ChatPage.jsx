@@ -21,6 +21,8 @@ const ChatPage = () => {
 
   const messagesEndRef = useRef(null);
 
+  const [connectionStatus, setConnectionStatus] = useState("Connecting...");
+
   // Handler Logout
   const handleLogout = () => {
     logout();
@@ -107,6 +109,7 @@ const ChatPage = () => {
     // Join chat after connection
     socket.on("connect", () => {
       console.log(`Connected: ${socket.id}`);
+      setConnectionStatus("Connected");
 
       socket.emit(
         "join-chat",
@@ -149,6 +152,14 @@ const ChatPage = () => {
       }
     );
 
+    socket.on("disconnect", () => {
+      setConnectionStatus("Disconnected");
+    });
+
+    socket.io.on("reconnect", () => {
+      setConnectionStatus("Connected");
+    });
+
     return () => {
       socket.off("online-users");
       socket.off("receive-message");
@@ -160,6 +171,9 @@ const ChatPage = () => {
         clearTimeout(typingTimeoutRef.current);
       }
 
+      socket.off("connect");
+      socket.off("disconnect");
+      socket.off("reconnect");
       socket.disconnect();
     };
   }, [user]);
@@ -188,6 +202,16 @@ const ChatPage = () => {
 
       <br />
       <br />
+
+      <h3>
+        {
+          connectionStatus === "Connected"
+          ? "🟢 Connected"
+          : connectionStatus === "Disconnected"
+          ? "🔴 Disconnected"
+          : "🟡 Connecting..."
+        }
+      </h3>
 
       <h2>Online Users</h2>
 
