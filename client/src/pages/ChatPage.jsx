@@ -140,7 +140,17 @@ const ChatPage = () => {
           
         </div>   
 
+        
+
         <div className='flex-1'>
+
+          <div className='border rounded-lg p-4 mb-3 bg-white shadow-sm'>
+
+            <h2 className='font-semibold'>
+              Global Chat Room
+            </h2>
+
+          </div>
 
           <MessageList messages={messages}
             user={user}
