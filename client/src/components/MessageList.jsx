@@ -2,7 +2,7 @@ import React from "react";
 
 const MessageList = ({ messages, user, formatTime, messagesEndRef, typingUser }) => {
   return (
-    <div className="border rounded-lg p-4 h-[500px] overflow-y-auto bg-gray-100">
+    <div className="border rounded-lg p-4 h-[400px] md:h-[500px] overflow-y-auto bg-gray-100">
 
       {
         messages.length === 0 && (
@@ -26,7 +26,7 @@ const MessageList = ({ messages, user, formatTime, messagesEndRef, typingUser })
               }`}
             >
 
-              <div className={`max-w-[70%] px-4 py-2 rounded-xl shadow-sm ${
+              <div className={`max-w-[85%] md:max-w-[70%] px-4 py-2 rounded-xl shadow-sm ${
                 isOwnMessage ?
                 "bg-blue-500 text-white"
                 : "bg-gray-200 text-black"

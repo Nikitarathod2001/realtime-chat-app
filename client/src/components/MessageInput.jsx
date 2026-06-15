@@ -2,7 +2,7 @@ import React from 'react'
 
 const MessageInput = ({message, handleTyping, handleSendMessage}) => {
   return (
-    <div className="flex gap-3 mt-3">
+    <div className="flex flex-col sm:flex-row gap-3 mt-3">
 
       <input type="text" 
         placeholder='Type message...'

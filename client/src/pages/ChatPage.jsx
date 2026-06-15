@@ -124,7 +124,7 @@ const ChatPage = () => {
   }, [messages]);
 
   return (
-    <div className='max-w-7xl mx-auto p-5'>
+    <div className='max-w-7xl mx-auto px-3 md:px-5 py-5'>
 
       <button onClick={handleLogout}>
         Logout
@@ -132,9 +132,9 @@ const ChatPage = () => {
 
       <ConnectionStatus connectionStatus={connectionStatus}/>
 
-      <div className='flex gap-5 mt-5'>
+      <div className='flex flex-col md:flex-row gap-5 mt-5'>
 
-        <div className='w-64 border rounded-lg p-4 bg-white shadow-sm'>
+        <div className='w-full md:w-64 border rounded-lg p-4 bg-white shadow-sm'>
 
           <OnlineUsers onlineUsers={onlineUsers} user={user}/>  
           
