@@ -11,18 +11,36 @@ const OnlineUsers = ({onlineUsers, user}) => {
         {onlineUsers.length} users online
       </p>
 
-      <ul className='space-y-2'>
+      <ul className='space-y-3'>
         {
-          onlineUsers.map((onlineUser) => (
-            <li key={onlineUser.userId}
-              className='border rounded-md px-3 py-2'
-            >
-              {
-                onlineUser.userId === user._id ?
-                "You" : onlineUser.username
-              }
-            </li>
-          ))
+          onlineUsers.map((onlineUser) => {
+            const isCurrentUser = onlineUser.userId === user._id;
+
+            return (
+              <li key={onlineUser.userId}
+                className='flex items-center justify-between p-3 rounded-lg border bg-gray-50 hover:bg-gray-100 transition'
+              >
+
+                <div className='flex items-center gap-3'>
+
+                  <div className='w-3 h-3 rounded-full bg-green-500'></div>
+
+                  <span className={
+                    isCurrentUser ?
+                    "font-semibold text-blue-600"
+                    : "text-gray-700"
+                  }>
+                    {
+                      isCurrentUser ?
+                      "Me" : onlineUser.username
+                    }
+                  </span>
+
+                </div>
+
+              </li>
+            );
+          })
         }
       </ul>
     </>

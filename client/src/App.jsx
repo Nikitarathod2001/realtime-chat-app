@@ -3,9 +3,12 @@ import AppRoute from './routes/AppRoute'
 
 const App = () => {
   return (
-    <div>
-      <h1>Real-Time chat app</h1>
-      <AppRoute/>
+    <div className='min-h-screen bg-gray-100'>
+
+      <main className='max-w-7xl mx-auto px-4 py-6'>
+        <AppRoute/>
+      </main>
+
     </div>
   )
 }

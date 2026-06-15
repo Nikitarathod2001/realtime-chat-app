@@ -126,31 +126,39 @@ const ChatPage = () => {
   return (
     <div className='max-w-7xl mx-auto px-3 md:px-5 py-5'>
 
-      <button onClick={handleLogout}>
-        Logout
-      </button>
+      <div className='flex justify-between items-center mb-5'>
+
+        <div>
+
+          <h1 className='text-2xl font-bold text-hray-800'>
+            Global Chat Room
+          </h1>
+
+          <p className='text-sm text-gray-500'>
+            Welcome, {user?.username}
+          </p>
+
+        </div>
+
+        <button onClick={handleLogout}
+          className='bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition'
+        >
+          Logout
+        </button>
+
+      </div>
 
       <ConnectionStatus connectionStatus={connectionStatus}/>
 
       <div className='flex flex-col md:flex-row gap-5 mt-5'>
 
-        <div className='w-full md:w-64 border rounded-lg p-4 bg-white shadow-sm'>
+        <div className='w-full md:w-72 border rounded-lg p-4 bg-white shadow-md'>
 
           <OnlineUsers onlineUsers={onlineUsers} user={user}/>  
           
         </div>   
 
-        
-
         <div className='flex-1'>
-
-          <div className='border rounded-lg p-4 mb-3 bg-white shadow-sm'>
-
-            <h2 className='font-semibold'>
-              Global Chat Room
-            </h2>
-
-          </div>
 
           <MessageList messages={messages}
             user={user}
