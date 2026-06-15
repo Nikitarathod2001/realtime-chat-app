@@ -17,6 +17,10 @@ const useSocket = (
       return;
     }
 
+    const token = localStorage.getItem("chat-token");
+
+    socket.auth = {token};
+
     // Socket connection
     socket.connect();
 
@@ -25,10 +29,7 @@ const useSocket = (
       console.log(`Connected: ${socket.id}`);
       setConnectionStatus("Connected");
 
-      socket.emit("join-chat", {
-        userId: user._id,
-        username: user.username,
-      });
+      socket.emit("join-chat");
     });
 
     // Receive online users
@@ -58,6 +59,15 @@ const useSocket = (
     socket.io.on("reconnect", () => {
       setConnectionStatus("Connected");
     });
+
+    socket.on("connect_error", (error) => {
+      console.log(error.message);
+
+      if(error.message === "Invalid token") {
+        localStorage.removeItem("token");
+      }
+    });
+    
   }, [user]);
 
   return () => {
