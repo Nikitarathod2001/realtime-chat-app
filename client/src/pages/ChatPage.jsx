@@ -9,6 +9,8 @@ import OnlineUsers from '../components/OnlineUsers';
 import MessageList from '../components/MessageList';
 import MessageInput from '../components/MessageInput';
 import useSocket from '../hooks/useSocket';
+import { getConversations } from '../services/conversationService';
+import ConversationList from '../components/ConversationList';
 
 const ChatPage = () => {
 
@@ -27,6 +29,8 @@ const ChatPage = () => {
   const messagesEndRef = useRef(null);
 
   const [connectionStatus, setConnectionStatus] = useState("Connecting...");
+
+  const [conversations, setConversations] = useState([]);
 
   // Custom socket hook
   useSocket(
@@ -123,6 +127,22 @@ const ChatPage = () => {
     scrollToBottom();
   }, [messages]);
 
+  // Load conversations
+  useEffect(() => {
+    const fetchConversations = async () => {
+      try {
+
+        const data = await getConversations();
+        setConversations(data.conversations);
+        
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchConversations();
+  }, []);
+
   return (
     <div className='max-w-7xl mx-auto px-3 md:px-5 py-5'>
 
@@ -154,7 +174,8 @@ const ChatPage = () => {
 
         <div className='w-full md:w-72 border rounded-lg p-4 bg-white shadow-md'>
 
-          <OnlineUsers onlineUsers={onlineUsers} user={user}/>  
+          {/* <OnlineUsers onlineUsers={onlineUsers} user={user}/>   */}
+          <ConversationList conversations={conversations} user={user}/>
           
         </div>   
 

@@ -26,7 +26,7 @@ const RegisterPage = () => {
 
       const data = await registerUser(formData);
 
-      toast.success(data.success);
+      toast.success("Registered Successfully!");
 
       setFormData({
         username: "",
