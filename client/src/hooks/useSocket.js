@@ -70,10 +70,8 @@ const useSocket = (
         localStorage.removeItem("chat-token");
       }
     });
-    
-  }, [user]);
 
-  return () => {
+    return () => {
     socket.off("online-users");
     socket.off("receive-private-message");
 
@@ -89,6 +87,9 @@ const useSocket = (
     socket.off("reconnect");
     socket.disconnect();
   };
+    
+  }, [user]);
+
 };
 
 export default useSocket;

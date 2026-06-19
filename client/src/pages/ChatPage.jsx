@@ -5,13 +5,13 @@ import socket from '../socket/socket';
 import { useState } from 'react';
 import api from '../services/api';
 import ConnectionStatus from '../components/ConnectionStatus';
-import OnlineUsers from '../components/OnlineUsers';
 import MessageList from '../components/MessageList';
 import MessageInput from '../components/MessageInput';
 import useSocket from '../hooks/useSocket';
-import { getConversations } from '../services/conversationService';
-import ConversationList from '../components/ConversationList';
 import { getPrivateMessages } from '../services/privateMessageService';
+import { getUsers } from '../services/userService';
+import UserList from '../components/UserList';
+import {startConversation} from "../services/conversationService";
 
 const ChatPage = () => {
 
@@ -31,9 +31,9 @@ const ChatPage = () => {
 
   const [connectionStatus, setConnectionStatus] = useState("Connecting...");
 
-  const [conversations, setConversations] = useState([]);
-
-  const [activeConversation, setActiveConversation] = useState(null);
+  const [users, setUsers] = useState([]);
+  const [activeUser, setActiveUser] = useState(null);
+  const [currentConversation, setCurrentConversation] = useState(null);
 
   // Custom socket hook
   useSocket(
@@ -57,11 +57,13 @@ const ChatPage = () => {
       return;
     }
 
-    const receiver = activeConversation.participants.find((participant) => participant._id !== user._id);
+    if(!currentConversation || !activeUser) {
+      return;
+    }
 
     socket.emit("private-message", {
-      conversationId: activeConversation._id,
-      receiverId: receiver._id,
+      conversationId: currentConversation._id,
+      receiverId: activeUser._id,
       text: message
     });
 
@@ -109,31 +111,30 @@ const ChatPage = () => {
     });
   };
 
+  // Handle user click
+  const handleUserClick = async (selectedUser) => {
+    setActiveUser(selectedUser);
+
+    try {
+
+      const data = await startConversation(selectedUser._id);
+
+      setCurrentConversation(data.conversation);
+      
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   // Scroll Into View
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
 
-  // Load conversations
-  useEffect(() => {
-    const fetchConversations = async () => {
-      try {
-
-        const data = await getConversations();
-        setConversations(data.conversations);
-        
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    fetchConversations();
-  }, []);
-
   // Load private messages
   useEffect(() => {
 
-    if(!activeConversation) {
+    if(!currentConversation) {
       return;
     }
 
@@ -141,7 +142,7 @@ const ChatPage = () => {
 
       try {
 
-        const data = await getPrivateMessages(activeConversation._id);
+        const data = await getPrivateMessages(currentConversation._id);
 
         setMessages(data.messages);
         
@@ -153,7 +154,25 @@ const ChatPage = () => {
 
     fetchMessages();
 
-  }, [activeConversation]);
+  }, [currentConversation]);
+
+  // Load users
+  useEffect(() => {
+
+    const fetchUsers = async () => {
+      try {
+
+        const data = await getUsers();
+        setUsers(data.users);
+        
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchUsers();
+
+  }, []);
 
   return (
     <div className='max-w-7xl mx-auto px-3 md:px-5 py-5'>
@@ -182,30 +201,44 @@ const ChatPage = () => {
 
         <div className='w-full md:w-72 border rounded-lg p-4 bg-white shadow-md'>
 
-          <OnlineUsers onlineUsers={onlineUsers} user={user}/>  
-          <ConversationList 
-            conversations={conversations}   
-            user={user}
-            activeConversation={activeConversation}
-            setActiveConversation={setActiveConversation}
+          <UserList 
+            users={users}
+            onlineUsers={onlineUsers}
+            activeUser={activeUser}
+            handleUserClick={handleUserClick}
           />
           
         </div>   
 
         <div className='flex-1'>
 
-          <MessageList messages={messages}
-            user={user}
-            formatTime={formatTime}
-            messagesEndRef={messagesEndRef}
-            typingUser={typingUser}
-            activeConversation={activeConversation}
-          />
-        
-          <MessageInput message={message}
-            handleTyping={handleTyping}
-            handleSendMessage={handleSendMessage}
-          />
+          {
+            !activeUser ? (
+              <div className='h-[500px] flex items-center justify-center bg-white rounded-lg border'>
+
+                <p className='text-gray-500'>
+                  Select a user to start chatting
+                </p>
+
+              </div>
+            ) : (
+              <>
+
+                <MessageList messages={messages}
+                  user={user}
+                  formatTime={formatTime}
+                  messagesEndRef={messagesEndRef}
+                  typingUser={typingUser}
+                />
+              
+                <MessageInput message={message}
+                  handleTyping={handleTyping}
+                  handleSendMessage={handleSendMessage}
+                />
+
+              </>
+            )
+          }
 
         </div>
 

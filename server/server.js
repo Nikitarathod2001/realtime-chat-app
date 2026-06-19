@@ -9,6 +9,7 @@ import socketHandler from "./src/socket/socketHandler.js";
 import messageRouter from "./src/routes/messageRoute.js";
 import conversationRouter from "./src/routes/conversationRoute.js";
 import privateMessageRouter from "./src/routes/privateMessageRoute.js";
+import userRouter from "./src/routes/userRoute.js";
 
 
 connectDB();
@@ -37,6 +38,7 @@ app.use("/api/auth", authRouter);
 app.use("/api/messages", messageRouter);
 app.use("/api/conversations", conversationRouter);
 app.use("/api/private-messages", privateMessageRouter);
+app.use("/api/users", userRouter);
 
 
 app.get("/", (req, res) => {

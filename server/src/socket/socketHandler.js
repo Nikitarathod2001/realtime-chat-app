@@ -44,18 +44,30 @@ const socketHandler = (io) => {
       
       onlineUsers.set(
         socket.user._id.toString(),
-        socket.id,
+        {
+          socketId: socket.id,
+          username: socket.user.username,
+        }
       );
 
       io.emit(
         "online-users",
-        Array.from(onlineUsers.values())
+        Array.from(onlineUsers.entries()).map(
+          ([userId, userData]) => ({
+            userId,
+            username: userData.username
+          })
+        )
       );
 
     });
 
      // Private Message
     socket.on("private-message", async (data) => {
+
+      console.log(`Sender: ${socket.user.username}`);
+      console.log(`ReceiverId:${data.receiverId}`);
+      console.log(`Online users: ${onlineUsers}`);
 
       const newMessage = await PrivateMessage.create({
         conversationId: data.conversationId,
@@ -76,7 +88,9 @@ const socketHandler = (io) => {
         "username"
       );
 
-      const receiverSocketId = onlineUsers.get(data.receiverId);
+      const receiverData = onlineUsers.get(data.receiverId);
+      console.log(receiverData);
+      const receiverSocketId = receiverData?.socketId;
 
       if(receiverSocketId) {
         io.to(receiverSocketId).emit(
@@ -116,7 +130,11 @@ const socketHandler = (io) => {
 
       io.emit(
         "online-users",
-        Array.from(onlineUsers.values())
+        Array.from(onlineUsers.entries())
+        .map(([userId, userData]) => ({
+          userId,
+          username: userData.username
+        }))
       );
 
       console.log(`User disconnected: ${socket.id}`);

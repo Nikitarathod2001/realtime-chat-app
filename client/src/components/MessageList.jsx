@@ -1,6 +1,6 @@
 import React from "react";
 
-const MessageList = ({ messages, user, formatTime, messagesEndRef, typingUser, activeConversation }) => {
+const MessageList = ({ messages, user, formatTime, messagesEndRef, typingUser }) => {
   return (
     <div className="border rounded-xl p-4 h-[400px] md:h-[500px] overflow-y-auto bg-gray-50 shadow-md">
 
