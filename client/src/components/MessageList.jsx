@@ -7,7 +7,7 @@ const MessageList = ({ messages, user, formatTime, messagesEndRef, typingUser, a
       {
         messages.map((msg) => {
 
-          const isOwnMessage = msg.senderId === user._id;
+          const isOwnMessage = msg.sender?._id === user._id;
 
           return (
             <div
@@ -27,7 +27,7 @@ const MessageList = ({ messages, user, formatTime, messagesEndRef, typingUser, a
                 {
                   !isOwnMessage && (
                     <p className="text-xs font-semibold text-blue-600 mb-1">
-                      {msg.senderName}
+                      {msg.sender?.username}
                     </p>
                   )
                 }
@@ -42,7 +42,7 @@ const MessageList = ({ messages, user, formatTime, messagesEndRef, typingUser, a
                   : "text-gray-400"
                 }`}>
                   {
-                    formatTime(msg.timestamp)
+                    formatTime(msg.createdAt)
                   }
                 </p>
 

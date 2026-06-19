@@ -69,8 +69,8 @@ const ChatPage = () => {
   };
 
   // Format time
-  const formatTime = (timestamp) => {
-    return new Date(timestamp)
+  const formatTime = (date) => {
+    return new Date(date)
       .toLocaleTimeString([], {
         hour: "2-digit",
         minute: "2-digit",
@@ -162,10 +162,6 @@ const ChatPage = () => {
 
         <div>
 
-          <h1 className='text-2xl font-bold text-hray-800'>
-            Global Chat Room
-          </h1>
-
           <p className='text-sm text-gray-500'>
             Welcome, {user?.username}
           </p>
@@ -186,7 +182,7 @@ const ChatPage = () => {
 
         <div className='w-full md:w-72 border rounded-lg p-4 bg-white shadow-md'>
 
-          {/* <OnlineUsers onlineUsers={onlineUsers} user={user}/>   */}
+          <OnlineUsers onlineUsers={onlineUsers} user={user}/>  
           <ConversationList 
             conversations={conversations}   
             user={user}

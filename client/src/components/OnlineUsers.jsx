@@ -32,7 +32,7 @@ const OnlineUsers = ({onlineUsers, user}) => {
                   }>
                     {
                       isCurrentUser ?
-                      "Me" : onlineUser.username
+                      "You" : onlineUser.username
                     }
                   </span>
 
