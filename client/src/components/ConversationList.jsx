@@ -1,6 +1,6 @@
 import React from 'react'
 
-const ConversationList = ({conversations, user}) => {
+const ConversationList = ({conversations, user, activeConversation, setActiveConversation}) => {
   return (
     <div>
       
@@ -13,7 +13,8 @@ const ConversationList = ({conversations, user}) => {
           const otherUser = conversation.participants.find((participant) => participant._id !== user._id);
 
           return (
-            <div key={conversation._id} 
+            <div key={conversation._id}
+              onClick={() => setActiveConversation(conversation)} 
               className='border rounded-lg p-3 mb-2 cursor-pointer hover:bg-gray-50'>
               {
                 otherUser?.username

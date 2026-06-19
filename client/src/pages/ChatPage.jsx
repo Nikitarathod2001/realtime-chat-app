@@ -11,6 +11,7 @@ import MessageInput from '../components/MessageInput';
 import useSocket from '../hooks/useSocket';
 import { getConversations } from '../services/conversationService';
 import ConversationList from '../components/ConversationList';
+import { getPrivateMessages } from '../services/privateMessageService';
 
 const ChatPage = () => {
 
@@ -31,6 +32,8 @@ const ChatPage = () => {
   const [connectionStatus, setConnectionStatus] = useState("Connecting...");
 
   const [conversations, setConversations] = useState([]);
+
+  const [activeConversation, setActiveConversation] = useState(null);
 
   // Custom socket hook
   useSocket(
@@ -54,9 +57,11 @@ const ChatPage = () => {
       return;
     }
 
+    const receiver = activeConversation.participants.find((participant) => participant._id !== user._id);
+
     socket.emit("private-message", {
-      conversationId: "6a34249fd02e8aff1fb347bb",
-      receiverId: "6a1dc7dbe74da7439f006ce7",
+      conversationId: activeConversation._id,
+      receiverId: receiver._id,
       text: message
     });
 
@@ -97,30 +102,12 @@ const ChatPage = () => {
     }, 1000);
   };
 
-  // Load messages
-  const loadMessages = async () => {
-    try {
-
-      const response = await api.get("/messages");
-
-      setMessages(response.data.messages);
-      
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   // Scroll Function
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({
       behavior: "smooth",
     });
   };
-
-  // Load messages 
-  useEffect(() => {
-    loadMessages();
-  }, []);
 
   // Scroll Into View
   useEffect(() => {
@@ -142,6 +129,31 @@ const ChatPage = () => {
 
     fetchConversations();
   }, []);
+
+  // Load private messages
+  useEffect(() => {
+
+    if(!activeConversation) {
+      return;
+    }
+
+    const fetchMessages = async () => {
+
+      try {
+
+        const data = await getPrivateMessages(activeConversation._id);
+
+        setMessages(data.messages);
+        
+      } catch (error) {
+        console.log(error);
+      }
+
+    };
+
+    fetchMessages();
+
+  }, [activeConversation]);
 
   return (
     <div className='max-w-7xl mx-auto px-3 md:px-5 py-5'>
@@ -175,7 +187,12 @@ const ChatPage = () => {
         <div className='w-full md:w-72 border rounded-lg p-4 bg-white shadow-md'>
 
           {/* <OnlineUsers onlineUsers={onlineUsers} user={user}/>   */}
-          <ConversationList conversations={conversations} user={user}/>
+          <ConversationList 
+            conversations={conversations}   
+            user={user}
+            activeConversation={activeConversation}
+            setActiveConversation={setActiveConversation}
+          />
           
         </div>   
 
@@ -186,6 +203,7 @@ const ChatPage = () => {
             formatTime={formatTime}
             messagesEndRef={messagesEndRef}
             typingUser={typingUser}
+            activeConversation={activeConversation}
           />
         
           <MessageInput message={message}

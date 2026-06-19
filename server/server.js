@@ -8,6 +8,7 @@ import authRouter from "./src/routes/authRoute.js";
 import socketHandler from "./src/socket/socketHandler.js";
 import messageRouter from "./src/routes/messageRoute.js";
 import conversationRouter from "./src/routes/conversationRoute.js";
+import privateMessageRouter from "./src/routes/privateMessageRoute.js";
 
 
 connectDB();
@@ -35,6 +36,7 @@ app.use(express.json());
 app.use("/api/auth", authRouter);
 app.use("/api/messages", messageRouter);
 app.use("/api/conversations", conversationRouter);
+app.use("/api/private-messages", privateMessageRouter);
 
 
 app.get("/", (req, res) => {

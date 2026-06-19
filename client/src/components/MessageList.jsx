@@ -1,24 +1,8 @@
 import React from "react";
 
-const MessageList = ({ messages, user, formatTime, messagesEndRef, typingUser }) => {
+const MessageList = ({ messages, user, formatTime, messagesEndRef, typingUser, activeConversation }) => {
   return (
     <div className="border rounded-xl p-4 h-[400px] md:h-[500px] overflow-y-auto bg-gray-50 shadow-md">
-
-      {
-        messages.length === 0 && (
-          <div className="h-full flex flex-col items-center justify-center text-gray-500">
-            
-            <p className="text-lg font-medium">
-              No messages yet
-            </p>
-
-            <p className="text-sm">
-              Start the conversation
-            </p>
-
-          </div>
-        )
-      }
 
       {
         messages.map((msg) => {
