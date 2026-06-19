@@ -37,10 +37,13 @@ const useSocket = (
       setOnlineUsers(users);
     });
 
-    // Receive messages
-    socket.on("receive-message", (newMessage) => {
-      setMessages((prev) => [...prev, newMessage]);
-    });
+    // Receive private messages
+    socket.on(
+      "receive-private-message",
+      (message) => {
+        setMessages(prev => [...prev, message])
+      }
+    );
 
     // Receive user-typing event
     socket.on("user-typing", (username) => {
@@ -64,7 +67,7 @@ const useSocket = (
       console.log(error.message);
 
       if(error.message === "Invalid token") {
-        localStorage.removeItem("token");
+        localStorage.removeItem("chat-token");
       }
     });
     
@@ -72,7 +75,7 @@ const useSocket = (
 
   return () => {
     socket.off("online-users");
-    socket.off("receive-message");
+    socket.off("receive-private-message");
 
     socket.off("user-typing");
     socket.off("user-stop-typing");

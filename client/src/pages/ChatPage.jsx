@@ -54,10 +54,10 @@ const ChatPage = () => {
       return;
     }
 
-    socket.emit("send-message", {
-      text: message,
-      senderId: user._id,
-      senderName: user.username
+    socket.emit("private-message", {
+      conversationId: "6a34249fd02e8aff1fb347bb",
+      receiverId: "6a1dc7dbe74da7439f006ce7",
+      text: message
     });
 
     setMessage("");

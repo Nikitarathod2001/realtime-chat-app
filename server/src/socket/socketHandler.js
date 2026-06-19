@@ -2,6 +2,8 @@ import Message from "../models/Message.js";
 import onlineUsers from "./onlineUsers.js";
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
+import PrivateMessage from "../models/PrivateMessageModel.js";
+import Conversation from "../models/Conversation.js";
 
 const socketHandler = (io) => {
 
@@ -39,14 +41,10 @@ const socketHandler = (io) => {
 
     // Join Chat
     socket.on("join-chat", () => {
-      const userData = {
-        userId: socket.user._id,
-        username: socket.user.username
-      };
       
       onlineUsers.set(
+        socket.user._id.toString(),
         socket.id,
-        userData
       );
 
       io.emit(
@@ -54,28 +52,44 @@ const socketHandler = (io) => {
         Array.from(onlineUsers.values())
       );
 
-      console.log(`${userData.username} joined chat`);
     });
 
-    // Receive messages and broadcast them
-    socket.on("send-message", async (messageData) => {
-      try {
+     // Private Message
+    socket.on("private-message", async (data) => {
 
-        const savedMessage = await Message.create({
-          text: messageData.text,
-          senderId: messageData.senderId,
-          senderName: messageData.senderName,
-          timestamp: new Date(),
-        });
+      const newMessage = await PrivateMessage.create({
+        conversationId: data.conversationId,
+        sender: socket.user._id,
+        receiver: data.receiverId,
+        text: data.text,
+      });
 
-        io.emit(
-          "receive-message",
-          savedMessage
+      await Conversation.findByIdAndUpdate(
+        data.conversationId,
+        {
+          updatedAt: new Date(),
+        }
+      );
+
+      await newMessage.populate(
+        "sender",
+        "username"
+      );
+
+      const receiverSocketId = onlineUsers.get(data.receiverId);
+
+      if(receiverSocketId) {
+        io.to(receiverSocketId).emit(
+          "receive-private-message",
+          newMessage
         );
-        
-      } catch (error) {
-        console.log(error);
       }
+
+      socket.emit(
+        "receive-private-message",
+        newMessage
+      );
+
     });
 
     // Typing event
@@ -96,7 +110,9 @@ const socketHandler = (io) => {
 
     // Disconnect
     socket.on("disconnect", () => {
-      onlineUsers.delete(socket.id);
+      onlineUsers.delete(
+        socket.user._id.toString()
+      );
 
       io.emit(
         "online-users",
