@@ -85,7 +85,6 @@ const socketHandler = (io) => {
       );
 
       const receiverData = onlineUsers.get(data.receiverId);
-      console.log(receiverData);
       const receiverSocketId = receiverData?.socketId;
 
       if(receiverSocketId) {

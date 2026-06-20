@@ -29,8 +29,6 @@ const ChatPage = () => {
 
   const messagesEndRef = useRef(null);
 
-  const [connectionStatus, setConnectionStatus] = useState("Connecting...");
-
   const [users, setUsers] = useState([]);
   const [activeUser, setActiveUser] = useState(null);
   const [currentConversation, setCurrentConversation] = useState(null);
@@ -206,8 +204,6 @@ const ChatPage = () => {
         </button>
 
       </div>
-
-      <ConnectionStatus connectionStatus={connectionStatus}/>
 
       <div className='flex flex-col md:flex-row gap-5 mt-5'>
 

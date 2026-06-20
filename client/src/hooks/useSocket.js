@@ -6,7 +6,6 @@ const useSocket = (
   user,
   setOnlineUsers,
   setMessages,
-  setConnectionStatus,
   setTypingUser,
   typingTimeoutRef,
   currentConversation
@@ -27,9 +26,6 @@ const useSocket = (
 
     // Join chat after connection
     socket.on("connect", () => {
-      console.log(`Connected: ${socket.id}`);
-      setConnectionStatus("Connected");
-
       socket.emit("join-chat");
     });
 
