@@ -65,10 +65,6 @@ const socketHandler = (io) => {
      // Private Message
     socket.on("private-message", async (data) => {
 
-      console.log(`Sender: ${socket.user.username}`);
-      console.log(`ReceiverId:${data.receiverId}`);
-      console.log(`Online users: ${onlineUsers}`);
-
       const newMessage = await PrivateMessage.create({
         conversationId: data.conversationId,
         sender: socket.user._id,

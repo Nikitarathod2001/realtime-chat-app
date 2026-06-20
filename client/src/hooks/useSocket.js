@@ -9,6 +9,7 @@ const useSocket = (
   setConnectionStatus,
   setTypingUser,
   typingTimeoutRef,
+  currentConversation
 ) => {
 
   useEffect(() => {
@@ -37,11 +38,18 @@ const useSocket = (
       setOnlineUsers(users);
     });
 
+    // Remove old conversation
+    socket.off("receive-private-message");
+
     // Receive private messages
     socket.on(
       "receive-private-message",
       (message) => {
-        setMessages(prev => [...prev, message])
+
+        if(currentConversation && message.conversationId === currentConversation._id) {
+          setMessages(prev => [...prev, message])
+        }
+        
       }
     );
 
@@ -88,7 +96,7 @@ const useSocket = (
     socket.disconnect();
   };
     
-  }, [user]);
+  }, [user, currentConversation]);
 
 };
 

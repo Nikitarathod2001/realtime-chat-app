@@ -42,7 +42,8 @@ const ChatPage = () => {
     setMessages,
     setConnectionStatus,
     setTypingUser,
-    typingTimeoutRef
+    typingTimeoutRef,
+    currentConversation
   );
 
   // Handler Logout
