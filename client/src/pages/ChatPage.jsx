@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import socket from '../socket/socket';
 import { useState } from 'react';
 import api from '../services/api';
-import ConnectionStatus from '../components/ConnectionStatus';
 import MessageList from '../components/MessageList';
 import MessageInput from '../components/MessageInput';
 import useSocket from '../hooks/useSocket';
@@ -38,7 +37,6 @@ const ChatPage = () => {
     user, 
     setOnlineUsers,
     setMessages,
-    setConnectionStatus,
     setTypingUser,
     typingTimeoutRef,
     currentConversation
