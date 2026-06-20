@@ -46,8 +46,8 @@ const useSocket = (
     );
 
     // Receive user-typing event
-    socket.on("user-typing", (username) => {
-      setTypingUser(username);
+    socket.on("user-typing", (data) => {
+      setTypingUser(data);
     });
 
     // Receive user-stop-typing event

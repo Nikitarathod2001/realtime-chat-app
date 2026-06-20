@@ -107,19 +107,31 @@ const socketHandler = (io) => {
     });
 
     // Typing event
-    socket.on("typing", (username) => {
-      socket.broadcast.emit(
-        "user-typing",
-        username
-      );
+    socket.on("typing", (data) => {
+      const receiverData = onlineUsers.get(data.receiverId);
+      const receiverSocketId = receiverData?.socketId;
+
+      if(receiverSocketId) {
+        io.to(receiverSocketId).emit(
+          "user-typing",
+          {
+            username: data.username,
+            userId: data.userId,
+          }
+        );
+      }
     });
 
     // Stop-typing event
-    socket.on("stop-typing", (username) => {
-      socket.broadcast.emit(
-        "user-stop-typing",
-        username
-      );
+    socket.on("stop-typing", (data) => {
+      const receiverData = onlineUsers.get(data.receiverId);
+      const receiverSocketId = receiverData?.socketId;
+
+      if(receiverSocketId) {
+        io.to(receiverSocketId).emit(
+          "user-stop-typing"
+        );
+      }
     });
 
     // Disconnect

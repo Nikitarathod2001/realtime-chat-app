@@ -22,7 +22,7 @@ const ChatPage = () => {
   const [onlineUsers, setOnlineUsers] = useState([]);
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
-  const[typingUser, setTypingUser] = useState("");
+  const[typingUser, setTypingUser] = useState(null);
 
   const typingTimeoutRef = useRef(null);
   const isTypingRef = useRef(false);
@@ -83,10 +83,18 @@ const ChatPage = () => {
   const handleTyping = (e) => {
     setMessage(e.target.value);
 
+    if(!activeUser) {
+      return;
+    }
+
     if(!isTypingRef.current) {
       socket.emit(
         "typing",
-        user.username
+        {
+          username: user.username,
+          userId: user._id,
+          receiverId: activeUser._id
+        }
       );
 
       isTypingRef.current = true;
@@ -97,7 +105,10 @@ const ChatPage = () => {
     typingTimeoutRef.current = setTimeout(() => {
       socket.emit(
         "stop-typing",
-        user.username
+        {
+          username: user.username,
+          receiverId: activeUser._id
+        }
       );
 
       isTypingRef.current = false;
@@ -229,6 +240,7 @@ const ChatPage = () => {
                   formatTime={formatTime}
                   messagesEndRef={messagesEndRef}
                   typingUser={typingUser}
+                  activeUser={activeUser}
                 />
               
                 <MessageInput message={message}

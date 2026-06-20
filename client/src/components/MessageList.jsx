@@ -1,6 +1,6 @@
 import React from "react";
 
-const MessageList = ({ messages, user, formatTime, messagesEndRef, typingUser }) => {
+const MessageList = ({ messages, user, formatTime, messagesEndRef, typingUser, activeUser }) => {
   return (
     <div className="border rounded-xl p-4 h-[400px] md:h-[500px] overflow-y-auto bg-gray-50 shadow-md">
 
@@ -54,13 +54,13 @@ const MessageList = ({ messages, user, formatTime, messagesEndRef, typingUser })
       }
 
       {
-        typingUser && (
-        <div className="flex justify-start mb-2">
+        typingUser?.userId === activeUser?._id && (
+        <div className="flex justify-start mb-2 animate-pulse">
 
           <div className="bg-white border px-4 py-2 rounded-2xl shadow-sm">
             
             <p className="text-sm text-gray-500 italic">
-              {typingUser} is typing...
+              {typingUser.username} is typing...
             </p>
 
           </div>
