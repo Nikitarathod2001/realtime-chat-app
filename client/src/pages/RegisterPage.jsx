@@ -42,57 +42,67 @@ const RegisterPage = () => {
   };
 
   return (
-    <div>
-      <h2>Create Account</h2>
+    <div className='min-h-screen flex items-center justify-center bg-gray-100 px-4'>
 
-      <form onSubmit={handleSubmit}>
+      <div className='w-full max-w-md bg-white shadow-lg rounded-xl p-8'>
 
-        <input type="text" 
-          name='username'
-          placeholder='Enter your name'
-          value={formData.username}
-          onChange={handleChange}
-          required
-        />
-
-        <br />
-        <br />
-
-        <input type="email" 
-          name='email'
-          placeholder='Enter your email'
-          value={formData.email}
-          onChange={handleChange}
-          required
-        />
-
-        <br />
-        <br />
-
-        <input type="password" 
-          name='password'
-          placeholder='Enter your password'
-          value={formData.password}
-          onChange={handleChange}
-          required
-        />
-
-        <br />
-        <br />
-
-        <button type="submit">
+        <h2 className='text-3xl font-bold text-center text-gray-800 mb-6'>
           Create Account
-        </button>
+        </h2>
 
-        <br />
-        <p>
+        <form onSubmit={handleSubmit}
+          className='space-y-4'
+        >
+
+          <input type="text" 
+            name='username'
+            placeholder='Enter your name'
+            value={formData.username}
+            onChange={handleChange}
+            required
+            className='w-full border border-gray-300 rounded-lg px-4 py-3 outline-none'
+          />
+
+          <input type="email" 
+            name='email'
+            placeholder='Enter your email'
+            value={formData.email}
+            onChange={handleChange}
+            required
+            className='w-full border border-gray-300 rounded-lg px-4 py-3 outline-none'
+          />
+
+          <input type="password" 
+            name='password'
+            placeholder='Enter your password'
+            value={formData.password}
+            onChange={handleChange}
+            required
+            className='w-full border border-gray-300 rounded-lg px-4 py-3 outline-none'
+          />
+
+          <button type="submit"
+            className='w-full bg-blue-500 hover:bg-blue-600 text-white font-medium py-3 rounded-lg transition duration-200'
+          >
+            Create Account
+          </button>
+
+        </form>
+
+        <p className='text-center text-gray-600 mt-5'>
+
           Already have an account?{" "}
-          <span onClick={() => navigate("/login")}>
+
+          <span onClick={() => navigate("/login")}
+            className='block sm:inline text-blue-500 font-medium cursor-pointer hover:text-blue-600'  
+          >
             Login here
           </span>
+
         </p>
 
-      </form>
+      </div>
+
     </div>
   )
 }
