@@ -52,7 +52,7 @@ const useSocket = (
 
     // Receive user-stop-typing event
     socket.on("user-stop-typing", () => {
-      setTypingUser("");
+      setTypingUser(null);
     });
 
     socket.on("disconnect", () => {
