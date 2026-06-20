@@ -189,7 +189,7 @@ const ChatPage = () => {
 
         <div>
 
-          <p className='text-sm text-gray-500'>
+          <p className='text-md text-gray-700 font-bold'>
             Welcome, {user?.username}
           </p>
 

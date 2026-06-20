@@ -29,20 +29,24 @@ const UserList = ({
                 return (
                   <div key={user._id}
                     onClick={() => handleUserClick(user)}
-                    className={`flex items-center justify-between p-3 rounded-xl cursor-pointer border transition ${
+                    className={`flex items-center p-3 rounded-xl cursor-pointer border transition ${
                       isActive ?
                       "bg-blue-50 border-blue-500"
                       : "bg-white hover:bg-gray-50"
                     }`}
                   >
-                    <div className={`w-3 h-3 rounded-full ${
-                      isOnline ? "bg-green-500" : "bg-gray-300"
-                    }`}>
-                    </div>
+                    <div className='flex items-center gap-2'>
 
-                    <span className='font-medium'>
-                      {user.username}
-                    </span>
+                      <div className={`w-3 h-3 rounded-full flex-shrink-0 ${
+                        isOnline ? "bg-green-500" : "bg-gray-300"
+                      }`}>
+                      </div>
+
+                      <span className=' text-sm sm:text-base truncate'>
+                        {user.username}
+                      </span>
+
+                    </div>
 
                   </div>
                 );
