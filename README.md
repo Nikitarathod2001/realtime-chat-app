@@ -68,11 +68,11 @@ npm install
 PORT=4000
 MONGO_URI=your_mongodb_connection
 JWT_SECRET=your_secret_key
+CLIENT_URL=your_frontend_url
 ```
 
 #### Create .env file in client folder:
 ```bash
-VITE_API_BASE_URL=your_base_api_url
 
 VITE_BACKEND_URL=your_backend_url
 ```
@@ -83,7 +83,7 @@ VITE_BACKEND_URL=your_backend_url
 #### Start Backend
 ```bash
 cd server
-npm run server
+npm run dev
 ```
 
 #### Start Frontend
