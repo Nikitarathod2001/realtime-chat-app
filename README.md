@@ -43,7 +43,7 @@ A full-stack real-time chat application built using the MERN stack with Socket.I
 
 ### 1. Clone repository
 ```bash
-git clone https://github.com/your-username/chat-app.git
+git clone https://github.com/Nikitarathod2001/realtime-chat-app.git
 ```
 
 ---
