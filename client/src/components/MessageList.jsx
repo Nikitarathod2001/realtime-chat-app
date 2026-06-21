@@ -61,9 +61,13 @@ const MessageList = ({ messages, user, formatTime, messagesEndRef, typingUser, a
 
           <div className="bg-white border px-4 py-2 rounded-2xl shadow-sm">
             
-            <p className="text-sm text-gray-500 italic">
-              {typingUser.username} is typing...
-            </p>
+            <div className="flex items-center gap-1">
+
+              <span className="w-1 h-1 bg-gray-500 rounded-full animate-bounce [animation-delay:-0.3s]"></span>
+              <span className="w-1 h-1 bg-gray-500 rounded-full animate-bounce [animation-delay:-0.15s]"></span>
+              <span className="w-1 h-1 bg-gray-500 rounded-full animate-bounce"></span>
+
+            </div>
 
           </div>
 

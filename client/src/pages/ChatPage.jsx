@@ -139,7 +139,7 @@ const ChatPage = () => {
   // Scroll Into View
   useEffect(() => {
     scrollToBottom();
-  }, [messages]);
+  }, [messages, typingUser]);
 
   // Load private messages
   useEffect(() => {
