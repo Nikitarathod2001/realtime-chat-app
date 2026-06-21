@@ -37,11 +37,25 @@ const MessageList = ({ messages, user, formatTime, messagesEndRef, typingUser, a
     return date.toLocaleDateString();
   };
 
+  if(!messages || messages.length === 0) {
+    return (
+      <div className="border border-slate-100 rounded-xl p-4 h-[400px] md:h-[500px] overflow-y-auto bg-slate-50 shadow-lg flex items-center justify-center">
+
+        <p className="text-slate-400 text-md">
+          No messages yet. Start Conversation
+        </p>
+
+      </div>
+    );
+  }
+
+  const groupedMessages = groupMessagesByDate(messages);
+
   return (
     <div className="border border-slate-100 rounded-xl p-4 h-[400px] md:h-[500px] overflow-y-auto bg-slate-50 shadow-lg">
 
       {
-        Object.entries(groupMessagesByDate(messages)).map(([date, msgs]) => (
+        Object.entries(groupedMessages).map(([date, msgs]) => (
 
           <div key={date}>
 
