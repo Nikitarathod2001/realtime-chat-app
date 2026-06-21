@@ -8,7 +8,7 @@ export const getPrivateMessages = async (req, res) => {
     const messages = await PrivateMessage.find({conversationId})
     .populate(
       "sender",
-      "username"
+      "_id username"
     ).sort({
       createdAt: 1,
     });

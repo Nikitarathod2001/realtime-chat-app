@@ -27,7 +27,9 @@ const MessageList = ({ messages, user, formatTime, messagesEndRef, typingUser, a
                 {
                   !isOwnMessage && (
                     <p className="text-xs font-semibold text-blue-600 mb-1">
-                      {msg.sender?.username}
+                      {
+                        msg.sender.username
+                      }
                     </p>
                   )
                 }

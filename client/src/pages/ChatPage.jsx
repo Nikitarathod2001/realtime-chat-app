@@ -123,6 +123,8 @@ const ChatPage = () => {
   const handleUserClick = async (selectedUser) => {
     setActiveUser(selectedUser);
 
+    setMessages([]);
+
     try {
 
       const data = await startConversation(selectedUser._id);
@@ -151,6 +153,9 @@ const ChatPage = () => {
       try {
 
         const data = await getPrivateMessages(currentConversation._id);
+
+        console.log(data.messages);
+        console.log(user._id);
 
         setMessages(data.messages);
         

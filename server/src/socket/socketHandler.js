@@ -81,7 +81,7 @@ const socketHandler = (io) => {
 
       await newMessage.populate(
         "sender",
-        "username"
+        "_id username"
       );
 
       const receiverData = onlineUsers.get(data.receiverId);
