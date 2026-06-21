@@ -74,7 +74,7 @@ const LoginPage = () => {
           />
 
           <button type="submit"
-            className='w-full bg-blue-500 hover:bg-blue-600 text-white font-medium py-3 rounded-lg transition duration-200'
+            className='w-full bg-emerald-700 hover:bg-emerald-800 text-white font-medium py-3 rounded-lg transition duration-200'
           >
             Login
           </button>
@@ -86,7 +86,7 @@ const LoginPage = () => {
           Don't have an account?{" "}
 
           <span onClick={() => navigate("/")}
-            className='block sm:inline text-blue-500 font-medium cursor-pointer hover:text-blue-600'  
+            className='block sm:inline text-emerald-500 font-medium cursor-pointer hover:text-emerald-600'  
           >
             Create account here
           </span>

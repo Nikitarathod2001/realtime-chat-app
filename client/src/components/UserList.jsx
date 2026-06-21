@@ -6,7 +6,7 @@ const UserList = ({
   return (
     <div>
       
-      <h2 className='text-lg font-semibold mb-4'>
+      <h2 className='text-lg font-semibold mb-4 text-white'>
         Chats
       </h2>
 
@@ -31,18 +31,22 @@ const UserList = ({
                     onClick={() => handleUserClick(user)}
                     className={`flex items-center p-3 rounded-xl cursor-pointer border transition ${
                       isActive ?
-                      "bg-blue-50 border-blue-500"
-                      : "bg-white hover:bg-gray-50"
+                      "bg-emerald-600 border-emerald-400"
+                      : "bg-emerald-900 border border-emerald-700 hover:bg-emerald-800"
                     }`}
                   >
                     <div className='flex items-center gap-2'>
 
                       <div className={`w-3 h-3 rounded-full flex-shrink-0 ${
-                        isOnline ? "bg-green-500" : "bg-gray-300"
+                        isOnline ? "bg-green-400" : "bg-emerald-700"
                       }`}>
                       </div>
 
-                      <span className=' text-sm sm:text-base truncate'>
+                      <span className={`text-sm sm:text-base truncate ${
+                        isActive ?
+                        "text-white font-medium"
+                        : "text-emerald-50"
+                      }`}>
                         {user.username}
                       </span>
 

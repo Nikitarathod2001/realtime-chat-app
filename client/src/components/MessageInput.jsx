@@ -18,7 +18,7 @@ const MessageInput = ({message, handleTyping, handleSendMessage}) => {
 
       <button onClick={handleSendMessage}
       disabled={!message.trim()}
-        className='bg-blue-500 text-white px-6 py-3 rounded-xl font-medium hover:bg-blue-600'
+        className='bg-teal-600 text-white px-6 py-3 rounded-xl font-medium hover:bg-teal-700'
       >
         Send
       </button>

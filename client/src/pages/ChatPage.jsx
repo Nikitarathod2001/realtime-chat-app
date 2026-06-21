@@ -188,20 +188,23 @@ const ChatPage = () => {
   }, []);
 
   return (
-    <div className='max-w-7xl mx-auto px-3 md:px-5 py-5'>
+    <div className='max-w-7xl mx-auto px-3 md:px-5 py-5 bg-slate-800'>
 
       <div className='flex justify-between items-center mb-5'>
 
         <div>
 
-          <p className='text-md text-gray-700 font-bold'>
-            Welcome, {user?.username}
+          <p className='text-2xl text-white font-bold'>
+            Welcome, 
+            <span className='block sm:inline sm:ml-2'>
+              {user?.username}
+            </span>
           </p>
 
         </div>
 
         <button onClick={handleLogout}
-          className='bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition'
+          className='bg-rose-700 hover:bg-rose-800 text-white px-4 py-2 rounded-lg transition'
         >
           Logout
         </button>
@@ -210,7 +213,7 @@ const ChatPage = () => {
 
       <div className='flex flex-col md:flex-row gap-5 mt-5'>
 
-        <div className='w-full md:w-72 border rounded-lg p-4 bg-white shadow-md'>
+        <div className='w-full md:w-72 border border-emerald-800 rounded-lg p-4 bg-emerald-950 shadow-md'>
 
           <UserList 
             users={users}
@@ -225,7 +228,7 @@ const ChatPage = () => {
 
           {
             !activeUser ? (
-              <div className='h-[500px] flex items-center justify-center bg-white rounded-lg border'>
+              <div className='h-[500px] flex items-center justify-center bg-white rounded-lg border-zinc-300'>
 
                 <p className='text-gray-500'>
                   Select a user to start chatting
