@@ -54,7 +54,7 @@ export const AuthContextProvider = ({children}) => {
     };
 
     loadUser();
-  }, []);
+  }, [token]);
 
 
   const value = {
