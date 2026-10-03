@@ -2,6 +2,7 @@ services:
   backend:
     build: ./server
     container_name: chat-backend
+    restart: unless-stopped
     ports:
       - "5000:5000"
     env_file:
@@ -13,6 +14,7 @@ services:
       args:
         VITE_URL: http://54.87.37.174
     container_name: chat-frontend
+    restart: unless-stopped
     ports:
       - "80:80"
     depends_on:
