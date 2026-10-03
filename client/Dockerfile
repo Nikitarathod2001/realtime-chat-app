@@ -8,6 +8,9 @@ RUN npm ci
 
 COPY . .
 
+ARG VITE_URL
+ENV VITE_URL=$VITE_URL
+
 RUN npm run build
 
 FROM nginx:alpine
