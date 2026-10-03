@@ -35,3 +35,11 @@ jobs:
         env:
           VITE_URL: http://localhost:5000
         run: npm run build
+
+      - name: Build backend Docker image
+        run: docker build -t realtime-chat-backend ./server
+
+      - name: Build frontend Docker image
+        run: docker build \
+          --build-arg VITE_URL=http://localhost:5000 \
+          -t realtime-chat-frontend ./client
